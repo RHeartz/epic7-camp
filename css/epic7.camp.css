@@ -1,0 +1,43 @@
+#divContainerCampResult {
+	border-left: 1px gray solid;
+	min-height: 275px;
+}
+
+#divContainerCampResult .row {
+	padding-left: 15px;
+}
+
+#drpCampHeroSelection {
+	width: 90%;
+}
+
+span.select2-selection--multiple {
+	max-height: 175px;
+	overflow-y: scroll;
+}
+
+#btnCampSubmit {
+	margin-top: 10px;
+	line-height: 1.25;
+}
+
+#divContainerCampInfoCombination {
+	margin-top: 25px;
+}
+
+#divContainerCampResultLoading {
+	display: flex;
+	align-items: center;
+	height: 50px;
+	margin-top: 25px;
+}
+
+#lblCampResultLoading {
+	margin: 0 5px;
+}
+
+#divCreditInfo {
+	margin-top: 15px;
+	margin-bottom: 0;
+	width: 100%;
+}

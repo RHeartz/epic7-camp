@@ -60,7 +60,7 @@ function configureDrpCampHeroSelection() {
 			$("#lblCampCombination").html(calcCombination(count, 4));
 			$("#divContainerCampInfoCombination").show();
 
-			if (count > 8) {
+			if (count > 20) {
 				$("#divContainerCampInfoWarning").show();
 			} else {
 				$("#divContainerCampInfoWarning").hide();

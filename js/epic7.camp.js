@@ -1,6 +1,7 @@
 var heroes = null;
 var campHeroes = null;
 var campOptions = null;
+var orderedResult = null;
 
 $(document).ready(function() {
 	$.getJSON("./json/epic7camp-minified-20190406.json", function(data) {
@@ -15,11 +16,16 @@ $(document).ready(function() {
 	$("#divContainerCampInfoWarning").hide();
 	$("#divContainerCampResultLoading").hide();
 	$("#btnCampSubmit").prop("disabled", true);
+	$("#btnCampSavePdf").prop("disabled", true);
 
 	$("#btnCampSubmit").click(function(e) {
 		$("#divContainerCampResultTable").empty();
 		$("#divContainerCampResultLoading").show();
 		getCampResult();
+	});
+
+	$("#btnCampSavePdf").click(function(e) {
+		saveResultToPdf();
 	});
 });
 
@@ -113,6 +119,7 @@ function getCampResult() {
 
 					var newBiggestMorale = {
 						"campOption" : "<span class='text-danger'>" + hero.name + "</span> - " + campOptions[heroCampOptionId] + " (" + currentMorale + ")",
+						"campOptionNoTags" : hero.name + " - " + campOptions[heroCampOptionId] + " (" + currentMorale + ")",
 						"morale" : currentMorale,
 					};
 
@@ -122,6 +129,7 @@ function getCampResult() {
 				else if (typeof biggestTwoMorale[1] === "undefined" || (typeof biggestTwoMorale[1] !== "undefined" && biggestTwoMorale[1].morale < currentMorale)) {
 					var newBiggestMorale = {
 						"campOption" : "<span class='text-danger'>" + hero.name + "</span> - " + campOptions[heroCampOptionId] + " (" + currentMorale + ")",
+						"campOptionNoTags" : hero.name + " - " + campOptions[heroCampOptionId] + " (" + currentMorale + ")",
 						"morale" : currentMorale,
 					};
 
@@ -132,20 +140,23 @@ function getCampResult() {
 
 		var teamResult = {
 			"heroes" : teamHeroes,
+			"heroesJoined" : teamHeroes.join(", "),
 			"options" : [ biggestTwoMorale[0].campOption, biggestTwoMorale[1].campOption ],
-			"morale" : biggestTwoMorale[0].morale + biggestTwoMorale[1].morale,
+			"optionsJoined" : biggestTwoMorale[0].campOptionNoTags + ", " + biggestTwoMorale[1].campOptionNoTags,
+			"morale" : (biggestTwoMorale[0].morale + biggestTwoMorale[1].morale).toString(),
 		};
 
 		result[result.length] = teamResult;
 	}
 
-	var orderedResult = result.sort(function(a, b) {
+	orderedResult = result.sort(function(a, b) {
 		return b.morale - a.morale;
 	});
 
 	$("#divContainerCampResultTable").html(generateCampResultHtml(orderedResult));
     $("#divContainerCampResultLoading").hide();
     $("#divContainerCampResultTable").show();
+    $("#btnCampSavePdf").prop("disabled", false);
 
     $("#tblCampResult").DataTable({
         info: false,
@@ -221,4 +232,18 @@ function indexCombinationBuilder(length) {
 	}
 
 	return result;
+}
+
+function saveResultToPdf() {
+	if (orderedResult === null || orderedResult.length === 0) {
+		return;
+	}
+
+	var pdf = new jsPDF({ compress: true });
+	pdf.setLineHeightFactor(1);
+	pdf.table(10, 10, orderedResult, [{ name: "heroesJoined", prompt: "Team", width: 100 }, 
+									  { name: "optionsJoined", prompt: "Best Camp Options", width: 125 }, 
+									  { name: "morale", prompt: "Morale", width: 30 }],
+									  { fontSize: 9 });
+	pdf.save("Best Camp Reactions.pdf")
 }

@@ -41,3 +41,10 @@ span.select2-selection--multiple {
 	margin-bottom: 0;
 	width: 100%;
 }
+
+#btnCampSavePdf {
+	line-height: 1.25;
+	position: relative;
+	top: -4px;
+	margin-left: 15px;
+}

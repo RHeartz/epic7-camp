@@ -42,7 +42,7 @@
                         <h2>Epic7 - Best Camp Reaction Simulator</h2>
                         <h4>
                             By <span class="author">RHeartz</span>
-                            <span>(<a data-toggle="modal" data-target="#versioning" href="#versioning">v1.1.1</a>)</span>
+                            <span>(<a data-toggle="modal" data-target="#versioning" href="#versioning">v1.1.2</a>)</span>
                         </h4>
                     </div>
                 </div>
@@ -70,8 +70,12 @@
                                 <button class="btn btn-success" type="button" id="btnCampSubmit">Calculate</button>
                             </div>
 
+                            <div class="row" id="divContainerCampInfoLock">
+                                <p>*Click again on the hero selection to lock/unlock a hero. Locked heroes will always be included in every team combination. Max locked heroes is 3.</p>
+                            </div>
+
                             <div class="row" id="divContainerCampInfoCombination">
-                                <p>*Will produce <span id="lblCampCombination">0</span> team combination(s).</p>
+                                <p>*Will produce <span id="lblCampCombination">0</span> team combination(s) <span id="spanContainerCampInfoLockTotal">with <span id="lblCampLockTotal"></span> locked <span id="lblCampLockHero">hero</span>.</p>
                             </div>
 
                             <div class="row" id="divContainerCampInfoWarning">
@@ -138,10 +142,19 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-2">
+                            <strong>v1.1.2</strong>
+                        </div>
+                        <div class="col-md-10">
+                            Added [Lock Hero] feature
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
                             <strong>v1.1.1</strong>
                         </div>
                         <div class="col-md-10">
-                            Added [Save as PDF] feature
+                            Added [Save as PDF] feature using <a href="https://rawgit.com/MrRio/jsPDF/master/docs/index.html">jsPDF</a> plugin
                         </div>
                     </div>
 

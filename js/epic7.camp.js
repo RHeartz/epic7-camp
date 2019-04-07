@@ -18,14 +18,47 @@ $(document).ready(function() {
 	$("#btnCampSubmit").prop("disabled", true);
 	$("#btnCampSavePdf").prop("disabled", true);
 
+
 	$("#btnCampSubmit").click(function(e) {
 		$("#divContainerCampResultTable").empty();
 		$("#divContainerCampResultLoading").show();
 		getCampResult();
 	});
 
+
 	$("#btnCampSavePdf").click(function(e) {
 		saveResultToPdf();
+	});
+
+
+	$(document).on('click', '.select2-selection__choice', function(e) {
+		if ($(this).hasClass("locked")) {
+			$(this).removeClass("locked");
+			$(this).children("span.fa-lock").remove();
+			configureCampHeroInfoLockedHeroes();
+		} else {
+			if ($("li.select2-selection__choice.locked").length < 3) {
+				$(this).addClass("locked");
+				$(this).append("<span class='fa fa-lock'></span>")
+				configureCampHeroInfoLockedHeroes();
+			}
+		}
+	});
+
+	
+	$("#drpCampHeroSelection").change(function(e) {
+		var locked = $("li.select2-selection__choice.locked");
+
+		setTimeout(function() {
+			for (var i = 0; i < locked.length; i++) {
+				var title = $(locked[i]).attr("title");
+				var selector = "li.select2-selection__choice[title='" + title + "']";
+				$(selector).addClass("locked");
+				$(selector).append("<span class='fa fa-lock'></span>")
+			}
+
+			configureCampHeroInfoLockedHeroes();
+		}, 0);
 	});
 });
 
@@ -63,7 +96,7 @@ function configureDrpCampHeroSelection() {
 		} else {
 			$("#btnCampSubmit").prop("disabled", false);
 
-			$("#lblCampCombination").html(calcCombination(count, 4));
+			configureCampHeroInfoLockedHeroes();
 			$("#divContainerCampInfoCombination").show();
 
 			if (count > 20) {
@@ -81,12 +114,49 @@ function configureDrpCampHeroSelection() {
 }
 
 
+function configureCampHeroInfoLockedHeroes() {
+	var lockedHeroes = getTotalLockedHeroes();
+	var selectedHeroes = $("#drpCampHeroSelection").val().length;
+
+	if (lockedHeroes > 0) {
+		$("#spanContainerCampInfoLockTotal").show();
+		$("#lblCampLockTotal").html(lockedHeroes);
+
+		if (lockedHeroes === 1) {
+			$("#lblCampLockHero").html("hero");
+		} else {
+			$("#lblCampLockHero").html("heroes");
+		}
+	} else {
+		$("#spanContainerCampInfoLockTotal").hide();
+	}
+
+	$("#lblCampCombination").html(calcCombination((selectedHeroes - lockedHeroes), (4 - lockedHeroes)));
+}
+
 function getCampResult() {
 	var selectedHeroes = $("#drpCampHeroSelection").val();
+	var lockedHeroes = getLockedHeroIds();
 	var teams = teamCombinationBuilder(selectedHeroes);
 	var result = [];
 
 	for (var i = 0; i < teams.length; i++) {
+		var allowed = true;
+		
+		if (lockedHeroes.length > 0) {
+			for (var j = 0; j < lockedHeroes.length; j++) {
+				if (!teams[i].includes(lockedHeroes[j])) {
+					allowed = false;
+					break;
+				}
+			}
+		}
+
+		if (!allowed) {
+			continue;
+		}
+
+
 		var team = teams[i];
 		var biggestTwoMorale = [];
 		var teamHeroes = [];
@@ -246,4 +316,27 @@ function saveResultToPdf() {
 									  { name: "morale", prompt: "Morale", width: 30 }],
 									  { fontSize: 9 });
 	pdf.save("Best Camp Reactions.pdf")
+}
+
+function getLockedHeroIds() {
+	var data = $("#drpCampHeroSelection").select2("data");
+	var lockedOptions = $("li.select2-selection__choice.locked");
+	var result = [];
+
+	for (var i = 0; i < lockedOptions.length; i++) {
+		var name = $(lockedOptions[i]).attr("title");
+
+		for (var j = 0; j < data.length; j++) {
+			if (data[j].text === name) {
+				result[i] = data[j].id;
+				break;
+			}
+		}
+	}
+
+	return result;
+}
+
+function getTotalLockedHeroes() {
+	return $("li.select2-selection__choice.locked").length;
 }

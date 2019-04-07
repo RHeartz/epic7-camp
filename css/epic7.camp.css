@@ -21,8 +21,8 @@ span.select2-selection--multiple {
 	line-height: 1.25;
 }
 
-#divContainerCampInfoCombination {
-	margin-top: 25px;
+#divContainerCampInfoLock {
+	margin-top: 20px;
 }
 
 #divContainerCampResultLoading {
@@ -47,4 +47,12 @@ span.select2-selection--multiple {
 	position: relative;
 	top: -4px;
 	margin-left: 15px;
+}
+
+li.select2-selection__choice.locked {
+	background-color: #fffbdb !important;
+}
+
+li.select2-selection__choice.locked span.fa-lock {
+	margin-left: 5px;
 }

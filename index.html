@@ -42,7 +42,7 @@
                         <h2>Epic7 - Best Camp Reaction Simulator</h2>
                         <h4>
                             By <span class="author">RHeartz</span>
-                            <span>(<a data-toggle="modal" data-target="#versioning" href="#versioning">v1.1.2</a>)</span>
+                            <span>(<a data-toggle="modal" data-target="#versioning" href="#versioning">v1.1.3</a>)</span>
                         </h4>
                     </div>
                 </div>
@@ -58,6 +58,7 @@
                         <div class="col-md-5" id="divContainerCampHeroSelection">
                             <div class="row">
                                 <h4>Select Heroes:</h4>
+                                <span id="lblCampSelectedHero">(<span id="lblCampSelectedHeroCount">0</span> selected heroes)</span>
                             </div>
 
                             <div class="row">
@@ -75,7 +76,7 @@
                             </div>
 
                             <div class="row" id="divContainerCampInfoCombination">
-                                <p>*Will produce <span id="lblCampCombination">0</span> team combination(s) <span id="spanContainerCampInfoLockTotal">with <span id="lblCampLockTotal"></span> locked <span id="lblCampLockHero">hero</span>.</p>
+                                <p>*Will produce <span id="lblCampCombination">0</span> team combination(s) <span id="spanContainerCampInfoLockTotal">with <span id="lblCampLockTotal"></span> locked <span id="lblCampLockHeroNoun">hero</span>.</p>
                             </div>
 
                             <div class="row" id="divContainerCampInfoWarning">
@@ -140,6 +141,15 @@
                 </div>
           
                 <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <strong>v1.1.3</strong>
+                        </div>
+                        <div class="col-md-10">
+                            Bug Fix: Prevented same camp option on both first and second best camp options
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-md-2">
                             <strong>v1.1.2</strong>

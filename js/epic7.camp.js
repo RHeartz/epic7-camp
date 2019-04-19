@@ -15,6 +15,7 @@ $(document).ready(function() {
 	$("#divContainerCampInfoCombination").hide();
 	$("#divContainerCampInfoWarning").hide();
 	$("#divContainerCampResultLoading").hide();
+	$("#lblCampSelectedHero").hide();
 	$("#btnCampSubmit").prop("disabled", true);
 	$("#btnCampSavePdf").prop("disabled", true);
 
@@ -22,7 +23,10 @@ $(document).ready(function() {
 	$("#btnCampSubmit").click(function(e) {
 		$("#divContainerCampResultTable").empty();
 		$("#divContainerCampResultLoading").show();
-		getCampResult();
+
+		setTimeout(function() {
+			getCampResult();
+		}, 100);
 	});
 
 
@@ -93,11 +97,14 @@ function configureDrpCampHeroSelection() {
 			$("#btnCampSubmit").prop("disabled", true);
 			$("#divContainerCampInfoCombination").hide();
 			$("#divContainerCampInfoWarning").hide();
+			$("#lblCampSelectedHero").hide();
 		} else {
 			$("#btnCampSubmit").prop("disabled", false);
 
 			configureCampHeroInfoLockedHeroes();
 			$("#divContainerCampInfoCombination").show();
+			$("#lblCampSelectedHero").show();
+			$("#lblCampSelectedHeroCount").html(count);
 
 			if (count > 20) {
 				$("#divContainerCampInfoWarning").show();
@@ -123,9 +130,9 @@ function configureCampHeroInfoLockedHeroes() {
 		$("#lblCampLockTotal").html(lockedHeroes);
 
 		if (lockedHeroes === 1) {
-			$("#lblCampLockHero").html("hero");
+			$("#lblCampLockHeroNoun").html("hero");
 		} else {
-			$("#lblCampLockHero").html("heroes");
+			$("#lblCampLockHeroNoun").html("heroes");
 		}
 	} else {
 		$("#spanContainerCampInfoLockTotal").hide();
@@ -182,24 +189,29 @@ function getCampResult() {
 					}
 				}
 
-				if (typeof biggestTwoMorale[0] === "undefined" || (typeof biggestTwoMorale[0] !== "undefined" && biggestTwoMorale[0].morale < currentMorale)) {
+				if (typeof biggestTwoMorale[0] === "undefined" || (typeof biggestTwoMorale[0] !== "undefined" && biggestTwoMorale[0].morale <= currentMorale)) {
 					if (typeof biggestTwoMorale[0] !== "undefined") {
-						biggestTwoMorale[1] = biggestTwoMorale[0];
+						if (typeof biggestTwoMorale[1] === "undefined" || 
+							(typeof biggestTwoMorale[1] !== "undefined" && heroCampOptionId !== biggestTwoMorale[0].campOptionId)) {
+							biggestTwoMorale[1] = biggestTwoMorale[0];
+						}
 					}
 
 					var newBiggestMorale = {
 						"campOption" : "<span class='text-danger'>" + hero.name + "</span> - " + campOptions[heroCampOptionId] + " (" + currentMorale + ")",
 						"campOptionNoTags" : hero.name + " - " + campOptions[heroCampOptionId] + " (" + currentMorale + ")",
+						"campOptionId" : heroCampOptionId,
 						"morale" : currentMorale,
 					};
 
 					biggestTwoMorale[0] = newBiggestMorale;
 				}
 
-				else if (typeof biggestTwoMorale[1] === "undefined" || (typeof biggestTwoMorale[1] !== "undefined" && biggestTwoMorale[1].morale < currentMorale)) {
+				else if (typeof biggestTwoMorale[1] === "undefined" || (typeof biggestTwoMorale[1] !== "undefined" && biggestTwoMorale[1].morale <= currentMorale)) {
 					var newBiggestMorale = {
 						"campOption" : "<span class='text-danger'>" + hero.name + "</span> - " + campOptions[heroCampOptionId] + " (" + currentMorale + ")",
 						"campOptionNoTags" : hero.name + " - " + campOptions[heroCampOptionId] + " (" + currentMorale + ")",
+						"campOptionId" : heroCampOptionId,
 						"morale" : currentMorale,
 					};
 
@@ -290,7 +302,7 @@ function teamCombinationBuilder(heroes) {
 
 function indexCombinationBuilder(length) {
 	var result = [];
-
+	
 	for (var a = 0; a < length - 3; a++) {
 		for (var b = a + 1; b < length - 2; b++) {
 			for (var c = b + 1; c < length - 1; c++) {

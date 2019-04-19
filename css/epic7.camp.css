@@ -7,6 +7,12 @@
 	padding-left: 15px;
 }
 
+#lblCampSelectedHero {
+	margin-left: 10px;
+	margin-top: 3px;
+	color: gray;
+}
+
 #drpCampHeroSelection {
 	width: 90%;
 }

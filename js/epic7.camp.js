@@ -2,9 +2,10 @@ var heroes = null;
 var campHeroes = null;
 var campOptions = null;
 var orderedResult = null;
+var jsonVersion = "20190502";
 
 $(document).ready(function() {
-	$.getJSON("./json/epic7camp-minified-20190406.json", function(data) {
+	$.getJSON("./json/epic7camp-minified-" + jsonVersion + ".json", function(data) {
 		heroes = data.heroes;
 		campHeroes = data.campHeroes;
 		campOptions = data.campOptions;

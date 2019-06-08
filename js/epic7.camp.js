@@ -2,7 +2,7 @@ var heroes = null;
 var campHeroes = null;
 var campOptions = null;
 var orderedResult = null;
-var jsonVersion = "20190510";
+var jsonVersion = "20190608";
 
 $(document).ready(function() {
 	$.getJSON("./json/epic7camp-minified-" + jsonVersion + ".json", function(data) {
